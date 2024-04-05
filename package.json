@@ -1,0 +1,17 @@
+{
+  "name": "WorkTimer",
+  "version": "1.0.0",
+  "description": "Keep track of work time",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Casey M. Dupre",
+  "license": "ISC",
+  "devDependencies": {
+    "webpack": "^5.91.0",
+    "webpack-cli": "^5.1.4"
+  }
+}
