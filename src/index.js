@@ -20,6 +20,7 @@ function toggleTimer(e) {
         e.target.classList.add('start');
     }
     else {
+        stopTasks();
         e.target.parentElement.task.start();
         e.target.textContent = 'Stop';
         e.target.classList.remove('start');
