@@ -46,9 +46,9 @@ function enableRunMode(restoreTasks = null) {
     totalizer.classList.remove('disabled');
 }
 
-function toggleRunMode(e = null, stopTasks = null) {
+function toggleRunMode(e = null, stopTask = null) {
     if (!pauseRuntime) {
-        stopTasks();
+        stopTask(e.target.parentElement);
         e.target.select();
     }
 
@@ -88,7 +88,7 @@ function createNewTask(parms) {
     const runtime = document.createElement('input');
     runtime.classList.add('runtime');
     runtime.placeholder = '0:00:00';
-    runtime.addEventListener('focusin', (e) => toggleRunMode(e, parms.stopTasks));
+    runtime.addEventListener('focusin', (e) => toggleRunMode(e, parms.stopTask));
     runtime.addEventListener('focusout', parseRuntime);
 
     const description = document.createElement('input');

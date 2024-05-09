@@ -42,11 +42,15 @@ function stopTasks() {
         if (child.task === undefined) {
             continue;
         }
-        child.getElementsByClassName('timer')[0].textContent = 'Start';
-        child.getElementsByClassName('timer')[0].classList.remove('stop');
-        child.getElementsByClassName('timer')[0].classList.add('start');
-        child.task.stop();
+        stopTask(child);
     }
+}
+
+function stopTask(element) {
+    element.getElementsByClassName('timer')[0].textContent = 'Start';
+    element.getElementsByClassName('timer')[0].classList.remove('stop');
+    element.getElementsByClassName('timer')[0].classList.add('start');
+    element.task.stop();
 }
 
 function startNewTask(e, task = null) {
@@ -61,7 +65,7 @@ function startNewTask(e, task = null) {
         task,
         toggleTimer,
         discardTask,
-        stopTasks,
+        stopTask,
     }
 
     const newTask = dom.createNewTask(parms);
