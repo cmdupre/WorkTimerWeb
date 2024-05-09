@@ -1,8 +1,6 @@
 'use strict'
 
-import util from "./util";
-
-const reverse = (str) => str.split('').reverse().join('');
+import helper from "./helper";
 
 function create(startTime = 0, tempRuntime = 0, description = '') {
     const obj = {
@@ -32,11 +30,11 @@ function createFromObject(obj) {
         let newMn = 0;
         let newSc = 0;
 
-        const r = reverse(newRuntime);
+        const r = helper.reverse(newRuntime);
 
-        if (newRuntime.length > 0) newSc = parseInt(reverse(r.substr(0, 2)));
-        if (newRuntime.length > 2) newMn = parseInt(reverse(r.substr(2, 2))) * 60;
-        if (newRuntime.length > 4) newHr = parseInt(reverse(r.substr(4))) * 3600;
+        if (newRuntime.length > 0) newSc = parseInt(helper.reverse(r.substr(0, 2)));
+        if (newRuntime.length > 2) newMn = parseInt(helper.reverse(r.substr(2, 2))) * 60;
+        if (newRuntime.length > 4) newHr = parseInt(helper.reverse(r.substr(4))) * 3600;
 
         tempRuntime = (newHr + newMn + newSc) * 1000;
     }
@@ -60,7 +58,7 @@ function createFromObject(obj) {
         isRunning: () => startTime !== 0,
         getDescription: () => description,
         setDescription: (value) => description = value,
-        runtime: () => util.getRuntimeString(getRuntimeSeconds()),
+        runtime: () => helper.getRuntimeString(getRuntimeSeconds()),
         stop,
         getRuntimeSeconds,
         toObject,

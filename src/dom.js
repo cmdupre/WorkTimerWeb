@@ -1,12 +1,12 @@
 'use strict'
 
 import storage from "./storage";
-import util from "./util";
+import helper from "./helper";
 
 const content = document.getElementById('content');
 let startButton = null;
 let totalizer = null;
-let runtimeToPause = null;
+let taskToPause = null;
 
 function createTotalizer() {
     if (totalizer) return;
@@ -47,24 +47,29 @@ function enableRunMode(restoreTasks = null) {
 }
 
 function toggleRunMode(e = null, stopTask = null) {
-    if (!runtimeToPause) {
-        runtimeToPause = e.target.parentElement;
-        stopTask(e.target.parentElement);
-        e.target.select();
+    if (taskToPause) {
+        taskToPause = null;
         return;
     }
 
-    runtimeToPause = null;
+    const runtime = e.target;
+    const taskDiv = runtime.parentElement;
+    
+    taskToPause = taskDiv;
+    stopTask(taskToPause);
+    runtime.select();
 }
 
 function parseRuntime(e) {
+    const runtime = e.target;
+    const taskDiv = runtime.parentElement;
     let sanitizedValue = '';
 
-    for (const c of e.target.value)
+    for (const c of runtime.value)
         if (!isNaN(c))
             sanitizedValue += c;
 
-    e.target.parentElement.task.changeRuntime(sanitizedValue);
+    taskDiv.task.changeRuntime(sanitizedValue);
     toggleRunMode();
     storage.storeTasks(content);
 }
@@ -107,28 +112,24 @@ function createNewTask(parms) {
     newTask.appendChild(description);
 
     content.insertBefore(newTask, startButton);
-    
     description.focus();
-
     return newTask;
 }
 
 function updateTotalizer() {
-    if (runtimeToPause) return;
+    if (taskToPause) return;
     let total = 0;
-    const children = content.getElementsByClassName('task');
-    for (const child of children) {
-        total += child.task.getRuntimeSeconds();
+    for (const taskDiv of content.getElementsByClassName('task')) {
+        total += taskDiv.task.getRuntimeSeconds();
     }
-    totalizer.textContent = util.getRuntimeString(total);
+    totalizer.textContent = helper.getRuntimeString(total);
 }
 
 function updateRuntimes() {
-    const children = content.children;
-    for (const child of children) {
-        if (child.task === undefined || child === runtimeToPause) continue;
-        const runtime = child.getElementsByClassName('runtime')[0];
-        runtime.value = child.task.runtime();
+    for (const taskDiv of content.getElementsByClassName('task')) {
+        if (taskDiv === taskToPause) continue;
+        const runtime = taskDiv.getElementsByClassName('runtime')[0];
+        runtime.value = taskDiv.task.runtime();
     }
 }
 
@@ -138,7 +139,7 @@ export default (() => {
         createTotalizer,
         createRestoreButton,
         createStartButton,
-        disableRestoreButton: enableRunMode,
+        enableRunMode,
         createNewTask,
         updateTotalizer,
         updateRuntimes,

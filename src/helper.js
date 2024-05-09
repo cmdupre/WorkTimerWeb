@@ -12,6 +12,7 @@ export default (() => {
             seconds = seconds < 10 ? '0' + seconds : seconds;
 
             return `${hours}:${minutes}:${seconds}`;
-        }
+        },
+        reverse: (str) => str.split('').reverse().join(''),
     }
 })();
