@@ -6,7 +6,7 @@ import util from "./util";
 const content = document.getElementById('content');
 let startButton = null;
 let totalizer = null;
-let pauseRuntime = false;
+let runtimeToPause = null;
 
 function createTotalizer() {
     if (totalizer) return;
@@ -47,12 +47,14 @@ function enableRunMode(restoreTasks = null) {
 }
 
 function toggleRunMode(e = null, stopTask = null) {
-    if (!pauseRuntime) {
+    if (!runtimeToPause) {
+        runtimeToPause = e.target.parentElement;
         stopTask(e.target.parentElement);
         e.target.select();
+        return;
     }
 
-    pauseRuntime = !pauseRuntime;
+    runtimeToPause = null;
 }
 
 function parseRuntime(e) {
@@ -112,7 +114,7 @@ function createNewTask(parms) {
 }
 
 function updateTotalizer() {
-    if (pauseRuntime) return;
+    if (runtimeToPause) return;
     let total = 0;
     const children = content.getElementsByClassName('task');
     for (const child of children) {
@@ -122,12 +124,9 @@ function updateTotalizer() {
 }
 
 function updateRuntimes() {
-    if (pauseRuntime) return;
     const children = content.children;
     for (const child of children) {
-        if (child.task === undefined) {
-            continue;
-        }
+        if (child.task === undefined || child === runtimeToPause) continue;
         const runtime = child.getElementsByClassName('runtime')[0];
         runtime.value = child.task.runtime();
     }
